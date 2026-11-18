@@ -65,6 +65,7 @@ import type { Revision } from './store.ts';
 import { mergePrefs, type Prefs } from '../shared/prefs.ts';
 import { cleanCategories, renameInSubs } from '../shared/categories.ts';
 import { createToken, listTokens, mcp, revokeToken } from './ai/mcp.ts';
+import { isOAuthPath, listGrants, oauth, revokeGrant } from './ai/oauth.ts';
 import { fetchPublic } from './url-guard.ts';
 import { TOOLS, toolTitle } from './ai/mcp-tools.ts';
 import { appStorePlans, searchAppStore } from './appstore.ts';
@@ -194,7 +195,12 @@ async function api(req: Request, env: Env, path: string): Promise<Response> {
   // MCP 令牌管理（后台「AI」页）：明文只在新建时返回一次
   if (path === '/api/mcp/tools' && method === 'GET')
     return json(TOOLS.map((x) => ({ name: x.name, title: toolTitle(x.name), description: x.description, write: !!x.write })));
-  if (path === '/api/mcp/tokens' && method === 'GET') return json((await listTokens(env)).map(({ hash: _h, ...rest }) => rest));
+  // OAuth 授权（claude.ai 连接器等）与令牌列在一起，kind 区分；吊销走同一个接口
+  if (path === '/api/mcp/tokens' && method === 'GET')
+    return json([
+      ...(await listTokens(env)).map(({ hash: _h, ...rest }) => ({ ...rest, kind: 'token' })),
+      ...(await listGrants(env)).map((g) => ({ ...g, prefix: '', kind: 'oauth' })),
+    ]);
   if (path === '/api/mcp/tokens' && method === 'POST') {
     const b = (await readJson(req)) as { name?: string; scope?: string };
     const { token, item } = await createToken(env, b.name ?? '', b.scope === 'read' ? 'read' : 'write');
@@ -203,7 +209,7 @@ async function api(req: Request, env: Env, path: string): Promise<Response> {
   }
   const tm = path.match(/^\/api\/mcp\/tokens\/([\w-]+)$/);
   if (tm && method === 'DELETE') {
-    await revokeToken(env, tm[1]);
+    if (!(await revokeGrant(env, tm[1]))) await revokeToken(env, tm[1]);
     return json({ ok: true });
   }
   let m = path.match(/^\/api\/subscriptions\/([\w-]+)$/);
@@ -550,22 +556,24 @@ async function handleFetch(req: Request, env: Env): Promise<Response> {
   const prefix = normalizeBasePath(env.BASE_PATH);
   url.pathname = stripBase(url.pathname, prefix);
   // 旧域名：页面跳到新域名，接口、MCP、日历订阅继续在旧域名上可用
+  // OAuth（发现、授权、换令牌）跟随 MCP：MCP 留在旧域名上可用，它的授权也必须留下
+  const server = url.pathname.startsWith('/api/') || url.pathname === '/mcp' || url.pathname.startsWith('/cal/') || isOAuthPath(url.pathname);
   if (env.OLD_HOSTS && env.SITE_URL && env.OLD_HOSTS.split(',').some((h) => h.trim() === url.hostname)) {
-    const keep = url.pathname.startsWith('/api/') || url.pathname === '/mcp' || url.pathname.startsWith('/cal/');
-    if (!keep) return Response.redirect(`${siteUrl(env.SITE_URL, prefix)}${url.pathname}${url.search}`, 301);
+    if (!server) return Response.redirect(`${siteUrl(env.SITE_URL, prefix)}${url.pathname}${url.search}`, 301);
   }
   // 没配置 SITE_URL 时，以当前访问的地址作为站点地址（提醒、日历里的链接）
   env = { ...env, SITE_URL: siteUrl(env.SITE_URL || url.origin, prefix) };
   try {
-    if (url.pathname.startsWith('/api/') || url.pathname === '/mcp' || url.pathname.startsWith('/cal/')) await ensureMigrated(env);
-    // 公开页、静态资源不需要文案；接口、MCP、日历订阅按请求或设置切换语言
-    if (url.pathname.startsWith('/api/') || url.pathname === '/mcp' || url.pathname.startsWith('/cal/')) {
+    if (server) await ensureMigrated(env);
+    // 公开页、静态资源不需要文案；接口、MCP、日历订阅、OAuth 确认页按请求或设置切换语言
+    if (server) {
       if (url.pathname !== '/api/rev') {
         const s = await getSettings(env);
         applyLocale(url.pathname === '/mcp' ? settingsLocale(s) : requestLocale(req, s));
       }
     }
     if (url.pathname.startsWith('/api/')) return await api(req, env, url.pathname);
+    if (isOAuthPath(url.pathname)) return (await oauth(req, env, url.pathname)) ?? bad('not found', 404);
     if (url.pathname === '/mcp') {
       // 在浏览器里打开 MCP 地址时，带去连接页查看令牌和配置
       if (req.method === 'GET' && req.headers.get('accept')?.includes('text/html')) return Response.redirect(`${env.SITE_URL}/connect`, 302);

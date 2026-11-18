@@ -66,5 +66,18 @@
     "notConfigured": "Chưa thiết lập sao lưu tự động",
     "interrupted": "Lần sao lưu trước chưa hoàn tất",
     "beforeRestoreFailed": "Sao lưu trước khi khôi phục thất bại; sổ không thay đổi: {error}"
+  },
+  "oauth": {
+    "pageTitle": "Cấp quyền truy cập Calends",
+    "title": "Cho phép {client} truy cập sổ Calends của bạn?",
+    "redirect": "Sau khi chọn, bạn sẽ quay lại {host}.",
+    "scopeRead": "Chỉ đọc: xem gói đăng ký, khoản trừ tiền và báo cáo",
+    "scopeWrite": "Đọc và ghi: thêm và sửa bản ghi",
+    "allow": "Cho phép",
+    "deny": "Từ chối",
+    "revokeHint": "Bạn có thể thu hồi quyền này bất cứ lúc nào trên trang Truy cập AI.",
+    "expired": "Yêu cầu cấp quyền này đã hết hạn hoặc đã được dùng. Hãy kết nối lại từ ứng dụng AI.",
+    "badClient": "Yêu cầu kết nối không hợp lệ: ứng dụng hoặc địa chỉ trả về chưa được đăng ký. Hãy kết nối lại từ ứng dụng AI.",
+    "aiDisabled": "Truy cập AI đang tắt. Hãy bật trên trang Truy cập AI của Calends rồi kết nối lại."
   }
 }

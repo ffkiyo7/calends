@@ -24,6 +24,8 @@ Before opening a PR, make sure these pass:
 npm run typecheck && npm run lint && npm run format:check && npm run i18n:check && npm test && npm run build
 ```
 
+For MCP OAuth changes, run `node scripts/oauth-release-check.mjs`: it starts a loopback-only Worker with login enabled on a fresh temporary database and walks discovery, registration, consent, token exchange, refresh, revocation and the refusal cases.
+
 For MCP release verification, run `node --experimental-strip-types scripts/mcp-release-check.mjs`.
 It starts a loopback-only Worker with a fresh temporary persistence directory, creates fictional monthly,
 quarterly and half-yearly carpools through the API, checks JSON-RPC schemas, permissions, previews,

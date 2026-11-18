@@ -1,12 +1,14 @@
 // MCP 服务器：让 Codex、Claude、Cursor 等 AI 助手通过 /mcp 读写账本。
 // 传输：Streamable HTTP 的无状态模式——每个 POST 是一条 JSON-RPC 请求，直接返回 JSON，不开 SSE、不保留会话。
 // 鉴权：Authorization: Bearer <令牌>；令牌在后台「AI」页生成，库里只存 SHA-256，分只读 / 读写两种权限。
+// 也接受 OAuth 访问令牌（cal_at_ 开头，见 oauth.ts），权限同样是只读或读写。
 import { countServer } from '../telemetry.ts';
 import { randomToken, sha256 } from '../auth.ts';
 import type { Env } from '../env.ts';
 import { getKv, getSettings, putKv } from '../store.ts';
 import { TOOLS, toolTitle, connectionInfo } from './mcp-tools.ts';
 import type { ToolCtx } from './tool-kit.ts';
+import { authenticateOAuth, resourceMetadataUrl } from './oauth.ts';
 import { todayIn } from '../../shared/billing.ts';
 import { t } from '../../shared/i18n.ts';
 
@@ -64,13 +66,14 @@ const touchStmt = (env: Env, id: string, at: string) =>
     "INSERT INTO kv (key, value, updated_at) VALUES (?1, json_object(?2, ?3), datetime('now')) ON CONFLICT(key) DO UPDATE SET value = json_set(kv.value, '$.' || json_quote(?2), ?3), updated_at = excluded.updated_at",
   ).bind(USE_KEY, id, at);
 
-/** 校验请求里的令牌；通过时顺手记下最后使用时间（同一小时内不重复写） */
-async function authenticate(req: Request, env: Env): Promise<McpToken | undefined> {
+/** 校验请求里的令牌（后台生成的 MCP 令牌，或 OAuth 访问令牌）；通过时顺手记下最后使用时间（同一小时内不重复写） */
+async function authenticate(req: Request, env: Env): Promise<Pick<McpToken, 'id' | 'scope'> | undefined> {
   const raw = req.headers
     .get('authorization')
     ?.match(/^Bearer\s+(.+)$/i)?.[1]
     ?.trim();
   if (!raw) return undefined;
+  if (raw.startsWith('cal_at_')) return authenticateOAuth(env, raw);
   const hash = await sha256(raw);
   const tk = (await listTokens(env)).find((x) => x.hash === hash);
   if (!tk) return undefined;
@@ -86,7 +89,7 @@ type Rpc = { jsonrpc: '2.0'; id?: string | number | null; method: string; params
 const ok = (id: Rpc['id'], result: unknown) => ({ jsonrpc: '2.0', id: id ?? null, result });
 const fail = (id: Rpc['id'], code: number, message: string) => ({ jsonrpc: '2.0', id: id ?? null, error: { code, message } });
 
-async function handle(msg: Rpc, env: Env, token: McpToken): Promise<unknown | undefined> {
+async function handle(msg: Rpc, env: Env, token: Pick<McpToken, 'scope'>): Promise<unknown | undefined> {
   // 通知（没有 id）只需确认收到
   if (msg.id === undefined) return undefined;
   switch (msg.method) {
@@ -138,13 +141,19 @@ export async function mcp(req: Request, env: Env): Promise<Response> {
     'access-control-allow-origin': '*',
     'access-control-allow-headers': 'authorization, content-type, mcp-protocol-version, mcp-session-id',
     'access-control-allow-methods': 'POST, GET, OPTIONS',
+    'access-control-expose-headers': 'www-authenticate',
   };
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
   // 无状态服务器不提供服务端推送流
   if (req.method !== 'POST') return new Response('Method Not Allowed', { status: 405, headers: { ...cors, allow: 'POST' } });
   if ((await getSettings(env)).aiEnabled === false) return Response.json(fail(null, -32002, t('mcp.error.aiDisabled')), { status: 403, headers: cors });
   const token = await authenticate(req, env);
-  if (!token) return Response.json(fail(null, -32001, t('mcp.error.badToken')), { status: 401, headers: { ...cors, 'www-authenticate': 'Bearer' } });
+  // resource_metadata 指向 OAuth 发现文档：只支持 OAuth 的客户端（如 claude.ai 自定义连接器）据此走授权流程
+  if (!token)
+    return Response.json(fail(null, -32001, t('mcp.error.badToken')), {
+      status: 401,
+      headers: { ...cors, 'www-authenticate': `Bearer resource_metadata="${resourceMetadataUrl(req, env)}"` },
+    });
   let body: Rpc | Rpc[];
   try {
     body = (await req.json()) as Rpc | Rpc[];

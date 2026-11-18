@@ -52,14 +52,16 @@
     "codex": "Chạy lệnh này trong terminal. Thêm dòng export vào tệp cấu hình shell để token vẫn còn sau khi khởi động lại.",
     "file": "Thêm đoạn này vào {path}.",
     "grokbot": "Trong Grok Bot, mở Cài đặt → Plugins, thêm máy chủ MCP rồi điền tên, URL và header bên dưới. Grok Bot chạy trên đám mây nên địa chỉ phải truy cập công khai được.",
-    "http": "Mọi MCP client hỗ trợ Streamable HTTP. Đây là một yêu cầu thử nhanh."
+    "http": "Mọi MCP client hỗ trợ Streamable HTTP. Đây là một yêu cầu thử nhanh.",
+    "claudeApp": "Trên claude.ai, mở Customize → Connectors → Add → Add custom connector. Claude kết nối từ đám mây nên địa chỉ phải truy cập công khai được."
   },
   "via": {
     "command": "Lệnh terminal",
     "install": "Cài đặt một chạm",
     "file": "Tệp cấu hình",
     "settings": "Cài đặt trong ứng dụng",
-    "http": "Mọi ứng dụng MCP"
+    "http": "Mọi ứng dụng MCP",
+    "oauth": "Đăng nhập bằng OAuth"
   },
   "step": {
     "token": "Token",
@@ -93,5 +95,12 @@
     "categories": "Danh mục",
     "settings": "Cài đặt",
     "other": "Khác"
+  },
+  "oauth": {
+    "step1": "Thêm trình kết nối trong {name}",
+    "step2": "Dán địa chỉ này làm URL máy chủ",
+    "step3": "Phê duyệt trong Calends",
+    "step3Hint": "Claude mở một trang Calends. Đăng nhập nếu được yêu cầu, chọn chỉ đọc hoặc đọc và ghi, rồi nhấn Cho phép. Không cần token.",
+    "authorized": "OAuth"
   }
 }

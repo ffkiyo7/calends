@@ -54,14 +54,16 @@
     "codex": "Ejecuta esto en tu terminal. Añade la línea export al perfil de tu shell para que el token se conserve tras reiniciar.",
     "file": "Añade esto a {path}.",
     "grokbot": "En Grok Bot, abre Ajustes → Plugins, añade un servidor MCP y rellena el nombre, la URL y la cabecera de abajo. Grok Bot se ejecuta en la nube, así que la dirección debe ser pública.",
-    "http": "Cualquier cliente MCP compatible con Streamable HTTP. Esta es una solicitud de prueba rápida."
+    "http": "Cualquier cliente MCP compatible con Streamable HTTP. Esta es una solicitud de prueba rápida.",
+    "claudeApp": "En claude.ai, abre Customize → Connectors → Add → Add custom connector. Claude se conecta desde la nube, así que la dirección debe ser accesible públicamente."
   },
   "via": {
     "command": "Comando de terminal",
     "install": "Instalación en un clic",
     "file": "Archivo de configuración",
     "settings": "Ajustes de la app",
-    "http": "Cualquier cliente MCP"
+    "http": "Cualquier cliente MCP",
+    "oauth": "Inicio de sesión con OAuth"
   },
   "step": {
     "token": "Token",
@@ -95,5 +97,12 @@
     "categories": "Categorías",
     "settings": "Ajustes",
     "other": "Otros"
+  },
+  "oauth": {
+    "step1": "Añade un conector en {name}",
+    "step2": "Pega esta dirección como URL del servidor",
+    "step3": "Aprueba en Calends",
+    "step3Hint": "Claude abre una página de Calends. Inicia sesión si te lo pide, elige solo lectura o lectura y escritura y pulsa Permitir. No necesitas token.",
+    "authorized": "OAuth"
   }
 }

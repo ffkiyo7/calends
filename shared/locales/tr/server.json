@@ -71,5 +71,18 @@
     "notConfigured": "Otomatik yedekleme ayarlanmamış",
     "interrupted": "Son yedekleme tamamlanmadı",
     "beforeRestoreFailed": "Geri yükleme öncesi yedek başarısız oldu; defter değişmedi: {error}"
+  },
+  "oauth": {
+    "pageTitle": "Calends erişimine izin ver",
+    "title": "{client} Calends kayıtlarınıza erişsin mi?",
+    "redirect": "Seçiminizden sonra {host} adresine döneceksiniz.",
+    "scopeRead": "Salt okunur: abonelikleri, ödemeleri ve raporları görüntüleme",
+    "scopeWrite": "Okuma ve yazma: kayıt ekleme ve değiştirme de",
+    "allow": "İzin ver",
+    "deny": "Reddet",
+    "revokeHint": "Bu erişimi istediğiniz zaman Yapay zekâ erişimi sayfasından iptal edebilirsiniz.",
+    "expired": "Bu yetkilendirme isteğinin süresi doldu ya da zaten kullanıldı. Yapay zeka uygulamanızdan yeniden bağlanın.",
+    "badClient": "Bu bağlantı isteği geçersiz: uygulama ya da dönüş adresi kayıtlı değil. Yapay zeka uygulamanızdan yeniden bağlanın.",
+    "aiDisabled": "Yapay zeka erişimi kapalı. Calends’te Yapay zekâ erişimi sayfasından açın, sonra yeniden bağlanın."
   }
 }

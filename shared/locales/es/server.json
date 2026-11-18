@@ -71,5 +71,18 @@
     "notConfigured": "La copia automática no está configurada",
     "interrupted": "La última copia no terminó",
     "beforeRestoreFailed": "Falló la copia previa a la restauración; el registro no ha cambiado: {error}"
+  },
+  "oauth": {
+    "pageTitle": "Autorizar acceso a Calends",
+    "title": "¿Permitir que {client} acceda a tu registro de Calends?",
+    "redirect": "Después de elegir, volverás a {host}.",
+    "scopeRead": "Solo lectura: ver suscripciones, cargos e informes",
+    "scopeWrite": "Lectura y escritura: también añadir y cambiar registros",
+    "allow": "Permitir",
+    "deny": "Denegar",
+    "revokeHint": "Puedes revocar este acceso cuando quieras en la página Acceso de IA.",
+    "expired": "Esta solicitud de autorización caducó o ya se usó. Vuelve a conectar desde tu app de IA.",
+    "badClient": "Esta solicitud de conexión no es válida: la app o su dirección de retorno no está registrada. Vuelve a conectar desde tu app de IA.",
+    "aiDisabled": "El acceso de IA está desactivado. Actívalo en la página Acceso de IA de Calends y vuelve a conectar."
   }
 }

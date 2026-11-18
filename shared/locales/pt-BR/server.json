@@ -71,5 +71,18 @@
     "notConfigured": "O backup automático não está configurado",
     "interrupted": "O último backup não terminou",
     "beforeRestoreFailed": "O backup antes da restauração falhou; o registro não foi alterado: {error}"
+  },
+  "oauth": {
+    "pageTitle": "Autorizar acesso ao Calends",
+    "title": "Permitir que {client} acesse seu registro no Calends?",
+    "redirect": "Depois de escolher, você volta para {host}.",
+    "scopeRead": "Somente leitura: ver assinaturas, cobranças e relatórios",
+    "scopeWrite": "Leitura e escrita: também adicionar e alterar registros",
+    "allow": "Permitir",
+    "deny": "Negar",
+    "revokeHint": "Você pode revogar este acesso a qualquer momento na página Acesso por IA.",
+    "expired": "Esta solicitação de autorização expirou ou já foi usada. Conecte de novo pelo seu app de IA.",
+    "badClient": "Esta solicitação de conexão não é válida: o app ou o endereço de retorno não está registrado. Conecte de novo pelo seu app de IA.",
+    "aiDisabled": "O acesso de IA está desativado. Ative na página Acesso por IA do Calends e conecte de novo."
   }
 }

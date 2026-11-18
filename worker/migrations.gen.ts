@@ -71,5 +71,14 @@ export const MIGRATIONS: Array<{ name: string; statements: string[] }> = [
     "statements": [
       "-- Owner-chosen device name; NULL falls back to the browser and OS parsed from user_agent.\nALTER TABLE sessions ADD COLUMN name TEXT"
     ]
+  },
+  {
+    "name": "0009_oauth.sql",
+    "statements": [
+      "-- OAuth 2.1 for remote MCP clients (claude.ai custom connectors and others).\n-- Clients self-register (RFC 7591); every secret below is stored as SHA-256 only.\nCREATE TABLE oauth_clients (\n  id TEXT PRIMARY KEY,\n  name TEXT NOT NULL,\n  redirect_uris TEXT NOT NULL,\n  created_at INTEGER NOT NULL\n)",
+      "-- An authorization request waiting for the owner's decision on the consent page.\nCREATE TABLE oauth_requests (\n  id TEXT PRIMARY KEY,\n  client_id TEXT NOT NULL,\n  redirect_uri TEXT NOT NULL,\n  code_challenge TEXT NOT NULL,\n  state TEXT,\n  expires_at INTEGER NOT NULL\n)",
+      "-- Single-use authorization codes issued after consent.\nCREATE TABLE oauth_codes (\n  code_hash TEXT PRIMARY KEY,\n  client_id TEXT NOT NULL,\n  redirect_uri TEXT NOT NULL,\n  code_challenge TEXT NOT NULL,\n  scope TEXT NOT NULL,\n  expires_at INTEGER NOT NULL\n)",
+      "-- One row per connected client authorization; refresh rotates both tokens in place.\nCREATE TABLE oauth_grants (\n  id TEXT PRIMARY KEY,\n  client_id TEXT NOT NULL,\n  scope TEXT NOT NULL,\n  access_hash TEXT NOT NULL UNIQUE,\n  access_expires_at INTEGER NOT NULL,\n  refresh_hash TEXT NOT NULL UNIQUE,\n  refresh_expires_at INTEGER NOT NULL,\n  created_at INTEGER NOT NULL,\n  last_used_at INTEGER\n)"
+    ]
   }
 ];

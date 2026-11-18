@@ -52,14 +52,16 @@
     "codex": "Jalankan ini di terminal Anda. Tambahkan baris export ke profil shell agar token tetap berlaku setelah restart.",
     "file": "Tambahkan ini ke {path}.",
     "grokbot": "Di Grok Bot, buka Pengaturan → Plugins, tambahkan server MCP, lalu isi nama, URL, dan header di bawah. Grok Bot berjalan di cloud, jadi alamatnya harus bisa diakses publik.",
-    "http": "Klien MCP apa pun yang mendukung Streamable HTTP. Ini permintaan uji singkat."
+    "http": "Klien MCP apa pun yang mendukung Streamable HTTP. Ini permintaan uji singkat.",
+    "claudeApp": "Di claude.ai, buka Customize → Connectors → Add → Add custom connector. Claude terhubung dari cloud, jadi alamatnya harus dapat diakses publik."
   },
   "via": {
     "command": "Perintah terminal",
     "install": "Pasang sekali klik",
     "file": "File konfigurasi",
     "settings": "Pengaturan aplikasi",
-    "http": "Klien MCP apa pun"
+    "http": "Klien MCP apa pun",
+    "oauth": "Masuk dengan OAuth"
   },
   "step": {
     "token": "Token",
@@ -93,5 +95,12 @@
     "categories": "Kategori",
     "settings": "Pengaturan",
     "other": "Lainnya"
+  },
+  "oauth": {
+    "step1": "Tambahkan konektor di {name}",
+    "step2": "Tempel alamat ini sebagai URL server",
+    "step3": "Setujui di Calends",
+    "step3Hint": "Claude membuka halaman Calends. Masuk jika diminta, pilih hanya baca atau baca dan tulis, lalu ketuk Izinkan. Tidak perlu token.",
+    "authorized": "OAuth"
   }
 }
