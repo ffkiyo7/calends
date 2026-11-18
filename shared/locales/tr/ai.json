@@ -54,14 +54,16 @@
     "codex": "Bunu terminalinizde çalıştırın. Token'ın yeniden başlatmalardan sonra da geçerli kalması için export satırını kabuk profilinize ekleyin.",
     "file": "Bunu {path} dosyasına ekleyin.",
     "grokbot": "Grok Bot’ta Ayarlar → Plugins’i açın, bir MCP sunucusu ekleyin ve aşağıdaki ad, URL ve başlığı girin. Grok Bot bulutta çalışır, bu yüzden adres herkese açık olmalı.",
-    "http": "Streamable HTTP destekleyen her MCP istemcisi. Bu kısa bir test isteğidir."
+    "http": "Streamable HTTP destekleyen her MCP istemcisi. Bu kısa bir test isteğidir.",
+    "claudeApp": "claude.ai üzerinde Customize → Connectors → Add → Add custom connector bölümünü açın. Claude buluttan bağlandığı için adresin herkese açık erişilebilir olması gerekir."
   },
   "via": {
     "command": "Terminal komutu",
     "install": "Tek tıkla kurulum",
     "file": "Yapılandırma dosyası",
     "settings": "Uygulama ayarları",
-    "http": "Herhangi bir MCP istemcisi"
+    "http": "Herhangi bir MCP istemcisi",
+    "oauth": "OAuth ile giriş"
   },
   "step": {
     "token": "Token",
@@ -95,5 +97,12 @@
     "categories": "Kategoriler",
     "settings": "Ayarlar",
     "other": "Diğer"
+  },
+  "oauth": {
+    "step1": "{name} içinde bağlayıcı ekleyin",
+    "step2": "Bu adresi sunucu URL’si olarak yapıştırın",
+    "step3": "Calends’te onaylayın",
+    "step3Hint": "Claude bir Calends sayfası açar. İstenirse giriş yapın, salt okunur ya da okuma ve yazma seçin, ardından İzin ver’e dokunun. Token gerekmez.",
+    "authorized": "OAuth"
   }
 }

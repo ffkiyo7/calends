@@ -66,5 +66,18 @@
     "notConfigured": "Cadangan otomatis belum diatur",
     "interrupted": "Pencadangan terakhir tidak selesai",
     "beforeRestoreFailed": "Pencadangan sebelum pemulihan gagal; buku tidak berubah: {error}"
+  },
+  "oauth": {
+    "pageTitle": "Izinkan akses Calends",
+    "title": "Izinkan {client} mengakses catatan Calends Anda?",
+    "redirect": "Setelah memilih, Anda akan kembali ke {host}.",
+    "scopeRead": "Hanya baca: lihat langganan, tagihan, dan laporan",
+    "scopeWrite": "Baca dan tulis: juga menambah dan mengubah catatan",
+    "allow": "Izinkan",
+    "deny": "Tolak",
+    "revokeHint": "Anda bisa mencabut akses ini kapan saja di halaman Akses AI.",
+    "expired": "Permintaan otorisasi ini sudah kedaluwarsa atau sudah dipakai. Hubungkan ulang dari aplikasi AI Anda.",
+    "badClient": "Permintaan koneksi ini tidak valid: aplikasi atau alamat kembalinya belum terdaftar. Hubungkan ulang dari aplikasi AI Anda.",
+    "aiDisabled": "Akses AI sedang nonaktif. Aktifkan di halaman Akses AI di Calends, lalu hubungkan ulang."
   }
 }

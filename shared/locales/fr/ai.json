@@ -54,14 +54,16 @@
     "codex": "Exécutez ceci dans votre terminal. Ajoutez la ligne export à votre profil shell pour que le jeton persiste après un redémarrage.",
     "file": "Ajoutez ceci à {path}.",
     "grokbot": "Dans Grok Bot, ouvrez Réglages → Plugins, ajoutez un serveur MCP et renseignez le nom, l’URL et l’en-tête ci-dessous. Grok Bot tourne dans le cloud : l’adresse doit être publique.",
-    "http": "Tout client MCP compatible Streamable HTTP. Voici une requête de test rapide."
+    "http": "Tout client MCP compatible Streamable HTTP. Voici une requête de test rapide.",
+    "claudeApp": "Sur claude.ai, ouvrez Customize → Connectors → Add → Add custom connector. Claude se connecte depuis le cloud : l’adresse doit être accessible publiquement."
   },
   "via": {
     "command": "Commande terminal",
     "install": "Installation en un clic",
     "file": "Fichier de configuration",
     "settings": "Réglages de l’app",
-    "http": "Tout client MCP"
+    "http": "Tout client MCP",
+    "oauth": "Connexion OAuth"
   },
   "step": {
     "token": "Jeton",
@@ -95,5 +97,12 @@
     "categories": "Catégories",
     "settings": "Réglages",
     "other": "Autres"
+  },
+  "oauth": {
+    "step1": "Ajoutez un connecteur dans {name}",
+    "step2": "Collez cette adresse comme URL du serveur",
+    "step3": "Approuvez dans Calends",
+    "step3Hint": "Claude ouvre une page Calends. Connectez-vous si demandé, choisissez lecture seule ou lecture et écriture, puis Autoriser. Aucun jeton nécessaire.",
+    "authorized": "OAuth"
   }
 }

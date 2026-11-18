@@ -92,6 +92,10 @@ export CALENDS_TOKEN='<token>'
 codex mcp add calends --url https://your-domain/mcp --bearer-token-env-var CALENDS_TOKEN
 ```
 
+**Claude custom connector (claude.ai)**
+
+On claude.ai, open Customize → Connectors → Add → Add custom connector and enter `https://your-domain/mcp`. No token is needed: Claude opens a Calends page where you sign in and allow read-only or read/write access. You can revoke it on the AI access page. Claude connects from Anthropic's cloud, so the address must be publicly reachable over HTTPS.
+
 Keep `CALENDS_TOKEN` available in the environment that launches Codex. Tools cover subscriptions, spending, trends, receivables and insights, plus changes to prices, plans, status and payments. Every write tool supports `dry_run`; AI access can be turned off in Settings.
 
 ## Privacy

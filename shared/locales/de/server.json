@@ -71,5 +71,18 @@
     "notConfigured": "Automatische Sicherung ist nicht eingerichtet",
     "interrupted": "Die letzte Sicherung wurde nicht abgeschlossen",
     "beforeRestoreFailed": "Die Sicherung vor der Wiederherstellung ist fehlgeschlagen; das Konto ist unverändert: {error}"
+  },
+  "oauth": {
+    "pageTitle": "Zugriff auf Calends erlauben",
+    "title": "{client} Zugriff auf dein Calends-Konto erlauben?",
+    "redirect": "Nach deiner Wahl geht es zurück zu {host}.",
+    "scopeRead": "Nur lesen: Abos, Abbuchungen und Berichte ansehen",
+    "scopeWrite": "Lesen und schreiben: auch Einträge hinzufügen und ändern",
+    "allow": "Erlauben",
+    "deny": "Ablehnen",
+    "revokeHint": "Du kannst diesen Zugriff jederzeit auf der Seite „KI-Zugriff“ widerrufen.",
+    "expired": "Diese Autorisierungsanfrage ist abgelaufen oder wurde bereits verwendet. Starte die Verbindung erneut in deiner KI-App.",
+    "badClient": "Diese Verbindungsanfrage ist ungültig: Die App oder ihre Rücksprungadresse ist nicht registriert. Starte die Verbindung erneut in deiner KI-App.",
+    "aiDisabled": "Der KI-Zugriff ist ausgeschaltet. Schalte ihn in Calends auf der Seite „KI-Zugriff“ ein und verbinde dich dann erneut."
   }
 }

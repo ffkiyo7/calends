@@ -92,6 +92,10 @@ export CALENDS_TOKEN='<令牌>'
 codex mcp add calends --url https://你的域名/mcp --bearer-token-env-var CALENDS_TOKEN
 ```
 
+**Claude 自定义连接器（claude.ai）**
+
+在 claude.ai 打开 Customize → Connectors → Add → Add custom connector，填入 `https://你的域名/mcp`。不需要令牌：Claude 会打开 Calends 的授权页，登录后选择只读或读写并允许。可在「连接」页随时撤销。Claude 从 Anthropic 的云端连接，地址需要能通过 HTTPS 公网访问。
+
 启动 Codex 的环境中需要保留 `CALENDS_TOKEN`。工具涵盖订阅、支出、趋势、应收款和体检，也能修改价格、套餐、状态与付款记录。所有写操作都支持 `dry_run` 预览；可在设置中关闭 AI 连接。
 
 ## 隐私

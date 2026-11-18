@@ -62,5 +62,18 @@
     "notConfigured": "还没有设置自动备份",
     "interrupted": "上次备份没有完成",
     "beforeRestoreFailed": "恢复前的自动备份失败，账本未改动：{error}"
+  },
+  "oauth": {
+    "pageTitle": "授权访问 Calends",
+    "title": "允许 {client} 访问你的 Calends 账本？",
+    "redirect": "选择后会回到 {host}。",
+    "scopeRead": "只读：查看订阅、扣费和报表",
+    "scopeWrite": "读写：还可以新增和修改记录",
+    "allow": "允许",
+    "deny": "拒绝",
+    "revokeHint": "之后可以随时在「连接 AI 助手」页撤销这项授权。",
+    "expired": "这个授权请求已过期或已用过。请回到 AI 应用里重新连接。",
+    "badClient": "这个连接请求无效：应用或它的回调地址没有登记。请回到 AI 应用里重新连接。",
+    "aiDisabled": "AI 接入已关闭。先在 Calends 的「连接 AI 助手」页打开，再重新连接。"
   }
 }

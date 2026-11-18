@@ -66,5 +66,18 @@
     "notConfigured": "자동 백업이 설정되지 않았습니다",
     "interrupted": "마지막 백업이 완료되지 않았습니다",
     "beforeRestoreFailed": "복원 전 자동 백업에 실패해 장부는 변경되지 않았습니다: {error}"
+  },
+  "oauth": {
+    "pageTitle": "Calends 액세스 승인",
+    "title": "{client}이(가) Calends 장부에 접근하도록 허용할까요?",
+    "redirect": "선택하면 {host}(으)로 돌아갑니다.",
+    "scopeRead": "읽기 전용: 구독, 결제, 보고서 보기",
+    "scopeWrite": "읽기 및 쓰기: 기록 추가와 변경도 가능",
+    "allow": "허용",
+    "deny": "거부",
+    "revokeHint": "이 액세스는 AI 연동 페이지에서 언제든 취소할 수 있습니다.",
+    "expired": "이 승인 요청이 만료되었거나 이미 사용되었습니다. AI 앱에서 다시 연결하세요.",
+    "badClient": "유효하지 않은 연결 요청입니다. 앱이나 돌아갈 주소가 등록되어 있지 않습니다. AI 앱에서 다시 연결하세요.",
+    "aiDisabled": "AI 연동이 꺼져 있습니다. Calends의 AI 연동 페이지에서 켠 뒤 다시 연결하세요."
   }
 }

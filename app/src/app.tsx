@@ -14,7 +14,10 @@ import { AskLayer, TipLayer, Toasts } from './components/overlays.tsx';
 import { Icon } from './components/icons.tsx';
 import { SubIcon } from './components/marks.tsx';
 import { useMedia } from './components/inputs.tsx';
-import { authStatus, boot, login, loginPasskey, saveSettings, setupPassword, startPasskeyAutofill, today, useStore } from './store.ts';
+import { api, authStatus, boot, login, loginPasskey, saveSettings, setupPassword, startPasskeyAutofill, today, useStore } from './store.ts';
+
+/** 登录后回 OAuth 确认页的那次会话确认：只发一次，失败（会话无效）时清空以便重新登录后再试 */
+let oauthReturn: Promise<void> | undefined;
 import { run } from './toast.ts';
 import { autoCheckUpdate, availableUpdate, useUpdateState } from './update-check.ts';
 import { usePref } from './prefs.ts';
@@ -36,7 +39,7 @@ import { Report } from './views/Report.tsx';
 import { IcsSheet, Settings } from './views/Settings.tsx';
 import { PublicPageEditor } from './views/PublicPageEditor.tsx';
 import { countPage, startTelemetry } from './telemetry.ts';
-import { currentRoute, go as navigate, href, initRouter, loginNext, onRoute, replaceRoute, sortNav } from './router.ts';
+import { currentRoute, go as navigate, href, initRouter, isOAuthConsent, loginNext, onRoute, replaceRoute, sortNav } from './router.ts';
 import { locale, t } from '../../shared/i18n.ts';
 import { initialLocale, loadLocale, preferredLocale } from './i18n.ts';
 import { monthEnd } from '../../shared/metrics.ts';
@@ -566,7 +569,18 @@ function App() {
     if (!state || (route !== '' && route !== 'login')) return;
     const sp = state.settings.startPage;
     const start = sp && navOf(state.settings).some((n) => n.path === sp) ? sp : 'overview';
-    replaceRoute((route === 'login' && loginNext()) || start);
+    const next = route === 'login' ? loginNext() : '';
+    // 从 MCP 客户端的授权确认页过来登录的：回到服务端的确认页，不是应用内路由。
+    // 先向服务端确认会话有效：启动时会先显示本机缓存的账本，会话已失效时直接跳过去会在确认页和登录页之间来回跳
+    if (isOAuthConsent(next)) {
+      if (!oauthReturn)
+        oauthReturn = api('/api/rev').then(
+          () => location.replace(href(next)),
+          () => (oauthReturn = undefined),
+        );
+      return;
+    }
+    replaceRoute(next || start);
   }, [state, route]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

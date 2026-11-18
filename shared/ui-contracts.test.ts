@@ -114,7 +114,7 @@ test('连接卡片默认收起、可切换和收起，重新挂载不记住选�
   const cards = () => aiNodes(h.renderElement(connection())).filter((e) => e.props.className?.startsWith('ai-client '));
   const steps = () => aiNodes(h.renderElement(connection())).find((e) => e.type === 'ol');
   assert.equal(steps(), undefined);
-  assert.equal(cards().length, 8);
+  assert.equal(cards().length, 9);
   for (const card of cards()) {
     assert.equal(card.type, 'button');
     assert.equal(card.props.type, 'button');
@@ -128,13 +128,20 @@ test('连接卡片默认收起、可切换和收起，重新挂载不记住选�
   let block = aiNodes(h.renderElement(connection())).find((e) => aiNamed(e, 'CodeBlock'))!;
   assert.ok(block.props.code.includes('claude mcp add'));
   assert.ok(block.props.code.includes('<your-token>'));
-  cards()[7].props.onClick();
+  // claude.ai 连接器走 OAuth：只给地址，不出现令牌或占位符
+  cards()[1].props.onClick();
+  assert.equal(cards()[1].props['aria-expanded'], true);
+  block = aiNodes(h.renderElement(connection())).find((e) => aiNamed(e, 'CodeBlock'))!;
+  assert.equal(block.props.code, 'https://example.test/mcp');
+  assert.equal(aiNodes(h.renderElement(connection())).filter((e) => e.type === 'ol').length, 1);
+  cards()[8].props.onClick();
   assert.equal(cards()[0].props['aria-expanded'], false);
-  assert.equal(cards()[7].props['aria-expanded'], true);
+  assert.equal(cards()[1].props['aria-expanded'], false);
+  assert.equal(cards()[8].props['aria-expanded'], true);
   block = aiNodes(h.renderElement(connection())).find((e) => aiNamed(e, 'CodeBlock'))!;
   assert.ok(block.props.code.includes('POST https://example.test/mcp'));
   assert.equal(aiNodes(h.renderElement(connection())).filter((e) => e.type === 'ol').length, 1);
-  cards()[7].props.onClick();
+  cards()[8].props.onClick();
   assert.equal(steps(), undefined);
   cards()[0].props.onClick();
   h.states.clear(); // 等价于首次进入或刷新后的组件重新挂载

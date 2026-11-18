@@ -71,5 +71,18 @@
     "notConfigured": "Automatic backup is not set up",
     "interrupted": "The last backup did not finish",
     "beforeRestoreFailed": "The backup before restoring failed; the ledger is unchanged: {error}"
+  },
+  "oauth": {
+    "pageTitle": "Authorize Calends access",
+    "title": "Allow {client} to access your Calends ledger?",
+    "redirect": "After you choose, you’ll go back to {host}.",
+    "scopeRead": "Read only: view subscriptions, charges and reports",
+    "scopeWrite": "Read and write: also add and change records",
+    "allow": "Allow",
+    "deny": "Deny",
+    "revokeHint": "You can revoke this access anytime on the AI access page.",
+    "expired": "This authorization request has expired or was already used. Start connecting again from your AI app.",
+    "badClient": "This connection request isn’t valid: the app or its return address isn’t registered. Start connecting again from your AI app.",
+    "aiDisabled": "AI access is turned off. Turn it on in Calends on the AI access page, then connect again."
   }
 }

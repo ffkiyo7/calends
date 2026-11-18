@@ -15,8 +15,11 @@ export function sortNav<T>(items: T[], keyOf: (x: T) => string, order: string[] 
     .map((a) => a.x);
 }
 
-/** 不归前端路由管的地址：公开页单独打包，接口、MCP、日历订阅和静态文件由服务端处理 */
-const isAppPath = (path: string) => !/^(public|mcp)$|^(api|cal)\//.test(path) && !/\.[\w]+$/.test(path);
+/** 不归前端路由管的地址：公开页单独打包，接口、MCP、OAuth、日历订阅和静态文件由服务端处理 */
+const isAppPath = (path: string) => !/^(public|mcp)$|^(api|cal|oauth|\.well-known)\//.test(path) && !/\.[\w]+$/.test(path);
+
+/** MCP 客户端的 OAuth 授权确认页：服务端渲染，登录后要整页跳过去 */
+export const isOAuthConsent = (path: string) => /^oauth\/consent\/[a-f0-9]{32}$/.test(path);
 
 /** 当前路由（部署前缀之后的部分，不含开头的 /） */
 export const currentRoute = () => decodeURIComponent(location.pathname.slice(BASE.length).replace(/^\/+|\/+$/g, ''));
@@ -27,7 +30,7 @@ export const href = (path: string) => `${BASE}/${path}`;
 /** 登录后要回到的路由：只取站内路由，防止被用来跳到别的网站 */
 export const loginNext = () => {
   const next = (new URLSearchParams(location.search).get('next') ?? '').replace(/^\/+/, '');
-  return next !== 'login' && isAppPath(next) ? next : '';
+  return next !== 'login' && (isAppPath(next) || isOAuthConsent(next)) ? next : '';
 };
 
 /** 替换当前地址（不留历史记录），用于启动页跳转 */

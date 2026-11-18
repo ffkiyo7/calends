@@ -71,5 +71,18 @@
     "notConfigured": "La sauvegarde automatique n’est pas configurée",
     "interrupted": "La dernière sauvegarde n’a pas abouti",
     "beforeRestoreFailed": "La sauvegarde avant restauration a échoué ; le registre n’a pas changé : {error}"
+  },
+  "oauth": {
+    "pageTitle": "Autoriser l’accès à Calends",
+    "title": "Autoriser {client} à accéder à votre registre Calends ?",
+    "redirect": "Après votre choix, vous reviendrez sur {host}.",
+    "scopeRead": "Lecture seule : voir les abonnements, prélèvements et rapports",
+    "scopeWrite": "Lecture et écriture : ajouter et modifier aussi des entrées",
+    "allow": "Autoriser",
+    "deny": "Refuser",
+    "revokeHint": "Vous pouvez révoquer cet accès à tout moment sur la page Accès IA.",
+    "expired": "Cette demande d’autorisation a expiré ou a déjà été utilisée. Relancez la connexion depuis votre app d’IA.",
+    "badClient": "Cette demande de connexion n’est pas valide : l’app ou son adresse de retour n’est pas enregistrée. Relancez la connexion depuis votre app d’IA.",
+    "aiDisabled": "L’accès IA est désactivé. Activez-le dans Calends sur la page Accès IA, puis reconnectez-vous."
   }
 }

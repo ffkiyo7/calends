@@ -52,14 +52,16 @@
     "codex": "ターミナルで実行してください。再起動後もトークンが有効になるよう、export の行をシェルの設定ファイルに追加してください。",
     "file": "{path} に追加してください。",
     "grokbot": "Grok Bot の 設定 → Plugins で MCP サーバーを追加し、下の名前・URL・ヘッダーを入力します。Grok Bot はクラウドで動くため、公開アドレスが必要です。",
-    "http": "Streamable HTTP に対応した MCP クライアントならどれでも使えます。以下はテスト用リクエストです。"
+    "http": "Streamable HTTP に対応した MCP クライアントならどれでも使えます。以下はテスト用リクエストです。",
+    "claudeApp": "claude.ai で Customize → Connectors → Add → Add custom connector を開きます。Claude はクラウドから接続するため、アドレスはインターネットから到達できる必要があります。"
   },
   "via": {
     "command": "ターミナルコマンド",
     "install": "ワンクリックで追加",
     "file": "設定ファイル",
     "settings": "アプリの設定",
-    "http": "任意の MCP クライアント"
+    "http": "任意の MCP クライアント",
+    "oauth": "OAuth でサインイン"
   },
   "step": {
     "token": "トークン",
@@ -93,5 +95,12 @@
     "categories": "カテゴリ",
     "settings": "設定",
     "other": "その他"
+  },
+  "oauth": {
+    "step1": "{name} にコネクタを追加",
+    "step2": "このアドレスをサーバー URL に貼り付け",
+    "step3": "Calends で許可",
+    "step3Hint": "Claude が Calends のページを開きます。必要ならサインインし、読み取り専用か読み書きを選んで「許可」を押します。トークンは不要です。",
+    "authorized": "OAuth"
   }
 }

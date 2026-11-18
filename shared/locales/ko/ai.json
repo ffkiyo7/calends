@@ -52,14 +52,16 @@
     "codex": "터미널에서 실행하세요. 재시작 후에도 토큰이 유지되도록 export 줄을 셸 프로필에 추가하세요.",
     "file": "{path}에 추가하세요.",
     "grokbot": "Grok Bot의 설정 → Plugins에서 MCP 서버를 추가하고 아래 이름, URL, 헤더를 입력하세요. Grok Bot은 클라우드에서 실행되므로 공개 주소여야 합니다.",
-    "http": "Streamable HTTP를 지원하는 모든 MCP 클라이언트에서 사용할 수 있습니다. 아래는 간단한 테스트 요청입니다."
+    "http": "Streamable HTTP를 지원하는 모든 MCP 클라이언트에서 사용할 수 있습니다. 아래는 간단한 테스트 요청입니다.",
+    "claudeApp": "claude.ai에서 Customize → Connectors → Add → Add custom connector를 엽니다. Claude는 클라우드에서 연결하므로 주소가 공개적으로 접근 가능해야 합니다."
   },
   "via": {
     "command": "터미널 명령",
     "install": "원클릭 설치",
     "file": "설정 파일",
     "settings": "앱 설정",
-    "http": "모든 MCP 클라이언트"
+    "http": "모든 MCP 클라이언트",
+    "oauth": "OAuth로 로그인"
   },
   "step": {
     "token": "토큰",
@@ -93,5 +95,12 @@
     "categories": "카테고리",
     "settings": "설정",
     "other": "기타"
+  },
+  "oauth": {
+    "step1": "{name}에 커넥터 추가",
+    "step2": "이 주소를 서버 URL에 붙여넣기",
+    "step3": "Calends에서 승인",
+    "step3Hint": "Claude가 Calends 페이지를 엽니다. 필요하면 로그인하고 읽기 전용 또는 읽기 및 쓰기를 선택한 뒤 허용을 누르세요. 토큰은 필요 없습니다.",
+    "authorized": "OAuth"
   }
 }

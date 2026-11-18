@@ -62,5 +62,18 @@
     "notConfigured": "尚未設定自動備份",
     "interrupted": "上次備份未完成",
     "beforeRestoreFailed": "還原前的自動備份失敗，帳本未變動：{error}"
+  },
+  "oauth": {
+    "pageTitle": "授權存取 Calends",
+    "title": "允許 {client} 存取你的 Calends 帳本？",
+    "redirect": "選擇後會回到 {host}。",
+    "scopeRead": "唯讀：查看訂閱、扣款和報表",
+    "scopeWrite": "讀寫：還可以新增和修改紀錄",
+    "allow": "允許",
+    "deny": "拒絕",
+    "revokeHint": "之後可以隨時在「連接 AI 助手」頁撤銷這項授權。",
+    "expired": "這個授權請求已過期或已使用過。請回到 AI 應用程式重新連線。",
+    "badClient": "這個連線請求無效：應用程式或它的回呼網址沒有登記。請回到 AI 應用程式重新連線。",
+    "aiDisabled": "AI 存取已關閉。請先在 Calends 的「連接 AI 助手」頁開啟，再重新連線。"
   }
 }

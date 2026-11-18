@@ -7,7 +7,7 @@ import { CardTitle, Toolbar } from '../components/ui.tsx';
 import { LoadFailed, Sheet } from '../components/overlays.tsx';
 import { Icon } from '../components/icons.tsx';
 import { Toggle } from '../components/inputs.tsx';
-import { ChartPie, Eye, KeyRound, Layers, PencilLine, ReceiptText, Settings2, Shapes, Tags, Users, Wallet } from 'lucide-react';
+import { ChartPie, Eye, KeyRound, Layers, Link2, PencilLine, ReceiptText, Settings2, Shapes, Tags, Users, Wallet } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { api, saveSettings } from '../store.ts';
 import { copyText, run } from '../toast.ts';
@@ -21,6 +21,8 @@ interface Token {
   scope: 'read' | 'write';
   createdAt: string;
   lastUsedAt?: string;
+  /** oauth：客户端经 OAuth 授权得到的访问（如 claude.ai 连接器），没有可显示的令牌前缀 */
+  kind?: 'token' | 'oauth';
 }
 interface ToolMeta {
   name: string;
@@ -61,6 +63,8 @@ interface Client {
   /** 一键安装（深链），需要真实令牌 */
   install?: (url: string, token: string) => string;
   experimental?: boolean;
+  /** 走 OAuth：不需要令牌，连接时在 Calends 的确认页授权 */
+  oauth?: boolean;
 }
 
 const json = (v: unknown) => JSON.stringify(v, null, 2);
@@ -75,6 +79,17 @@ const CLIENTS: Client[] = [
     via: 'command',
     where: () => t('ai.where.terminal'),
     snippet: (url, tk) => `claude mcp add --transport http calends ${url} \\\n  --header "Authorization: Bearer ${tk}"`,
+  },
+  {
+    // claude.ai 自定义连接器：只支持 OAuth（或仅部分组织开放的固定请求头）
+    id: 'claude-app',
+    name: 'Claude',
+    logo: base('/ai/claude.svg'),
+    lang: 'http',
+    via: 'settings',
+    oauth: true,
+    where: () => t('ai.where.claudeApp'),
+    snippet: (url) => url,
   },
   {
     id: 'codex',
@@ -217,12 +232,28 @@ function Connect({
             <ClientLogo c={x} />
             <span className="ai-client-text">
               {x.name || t('ai.clientOther')}
-              <small>{t(`ai.via.${token && x.install ? 'install' : x.via}`)}</small>
+              <small>{x.oauth ? t('ai.via.oauth') : t(`ai.via.${token && x.install ? 'install' : x.via}`)}</small>
             </span>
           </button>
         ))}
       </div>
-      {c && (
+      {c?.oauth && (
+        <ol id={stepsId} className="ai-steps">
+          <li>
+            <b>{t('ai.oauth.step1', { name })}</b>
+            <span>{c.where()}</span>
+          </li>
+          <li className="ai-step-code">
+            <b>{t('ai.oauth.step2')}</b>
+            <CodeBlock code={code} lang="URL" onCopy={() => copy(code, t('ai.urlCopied'))} />
+          </li>
+          <li>
+            <b>{t('ai.oauth.step3')}</b>
+            <span>{t('ai.oauth.step3Hint')}</span>
+          </li>
+        </ol>
+      )}
+      {c && !c.oauth && (
         <ol id={stepsId} className="ai-steps">
           <li>
             <b>{t('ai.step.token')}</b>
@@ -368,7 +399,7 @@ export function Ai({ state, switcher }: { state: AppState; switcher?: ReactNode 
                 <div key={tk.id} className="ai-token" role="row">
                   <span className="ai-token-name" role="cell">
                     <span className="ai-token-ico" aria-hidden>
-                      <KeyRound size={15} />
+                      {tk.kind === 'oauth' ? <Link2 size={15} /> : <KeyRound size={15} />}
                     </span>
                     <b>{tk.name}</b>
                     <span className={`ai-scope ${tk.scope}`}>
@@ -377,8 +408,14 @@ export function Ai({ state, switcher }: { state: AppState; switcher?: ReactNode 
                     </span>
                   </span>
                   <code className="ai-token-key" role="cell">
-                    {tk.prefix}
-                    <span aria-hidden>••••••••</span>
+                    {tk.kind === 'oauth' ? (
+                      t('ai.oauth.authorized')
+                    ) : (
+                      <>
+                        {tk.prefix}
+                        <span aria-hidden>••••••••</span>
+                      </>
+                    )}
                   </code>
                   <span className="ai-token-when created" role="cell">
                     <small>{t('ai.col.created')}</small>

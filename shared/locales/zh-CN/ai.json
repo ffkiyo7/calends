@@ -52,14 +52,16 @@
     "codex": "在终端里运行。把 export 那一行加到 shell 配置文件里，重启后令牌仍然有效。",
     "file": "添加到 {path}。",
     "grokbot": "在 Grok Bot 打开 设置 → Plugins，添加 MCP 服务器，按下面填写名称、地址和请求头。Grok Bot 运行在云端，地址需要公网可访问。",
-    "http": "任何支持 Streamable HTTP 的 MCP 客户端都可以。下面是一条测试请求。"
+    "http": "任何支持 Streamable HTTP 的 MCP 客户端都可以。下面是一条测试请求。",
+    "claudeApp": "在 claude.ai 打开 Customize → Connectors → Add → Add custom connector。Claude 从云端连接，地址需要公网可访问。"
   },
   "via": {
     "command": "终端命令",
     "install": "一键安装",
     "file": "配置文件",
     "settings": "应用内设置",
-    "http": "任意客户端"
+    "http": "任意客户端",
+    "oauth": "OAuth 登录授权"
   },
   "step": {
     "token": "令牌",
@@ -93,5 +95,12 @@
     "categories": "分类",
     "settings": "设置",
     "other": "其他"
+  },
+  "oauth": {
+    "step1": "在 {name} 里添加连接器",
+    "step2": "把这个地址填为服务器 URL",
+    "step3": "在 Calends 里确认授权",
+    "step3Hint": "Claude 会打开 Calends 的授权页：按提示登录，选只读或读写，再点「允许」。不需要令牌。",
+    "authorized": "OAuth"
   }
 }
