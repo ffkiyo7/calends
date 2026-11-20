@@ -1151,11 +1151,24 @@ test('accounts belong to person × plan: API/MCP persistence, independent update
   }
 });
 
+/**
+ * 本月 1 日开始的同一订阅：车的收款日固定在 1 日。
+ * 默认夹具从今天开始，收款日随运行日期变；在 20 日、25 日运行时会和用例里写死的加入日撞上，首期变成完整一期
+ */
+const monthStartSub = (): Subscription => {
+  const s = sub();
+  s.start = `${todayIn('UTC').slice(0, 7)}-01`;
+  const member = s.share!.members[0];
+  member.receipts = member.receipts!.map((r) => ({ ...r, periods: [s.start] }));
+  return s;
+};
+
 test('collect_day=joined: MCP pins the anchor only for whole first periods and moves it with the join date', async () => {
   const f = await setup();
   // 加入日早于开始日（今天）11 天：不会与车的收款日同一天
   const joined = addDays(todayIn('UTC'), -11);
   try {
+    await upsert(f.env, 'subscriptions', 's', monthStartSub());
     const plan = async () => (await f.call('get_carpool', { subscription: 's' }, f.read)).structuredContent.plans[0];
     const member = async (id: string) =>
       (await f.snapshot()).subscriptions.find((s) => s.id === 's')!.share!.members.find((m) => m.id === id || m.name === id)!;
@@ -1189,6 +1202,7 @@ test('carpool collection rule: MCP reads, sets, follows and customizes member fe
   // 加入日早于开始日（今天）11 天：不会与车的收款日同一天
   const joined = addDays(todayIn('UTC'), -11);
   try {
+    await upsert(f.env, 'subscriptions', 's', monthStartSub());
     const plan = async () => (await f.call('get_carpool', { subscription: 's' }, f.read)).structuredContent.plans[0];
     const member = async (id: string) =>
       (await f.snapshot()).subscriptions.find((s) => s.id === 's')!.share!.members.find((m) => m.id === id || m.name === id)!;
