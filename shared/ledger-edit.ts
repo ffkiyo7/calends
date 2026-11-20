@@ -219,12 +219,18 @@ export function validateMethod(st: Pick<AppState, 'fx'>, m: PaymentMethod): void
   validateCurrency(st, m.currency);
 }
 export function safeSettings(st: AppState) {
+  const settings: Record<string, unknown> = Object.fromEntries(
+    Object.keys(SETTINGS_FIELDS.properties!)
+      .filter((k) => k in st.settings)
+      .map((k) => [k, st.settings[k as keyof Settings]]),
+  );
+  // 上传的头像是整张 data URL（可达数百 KB），工具结果只说明有没有，与人员摘要的 has_avatar 一致；网址头像照常返回
+  if (typeof settings.avatar === 'string' && settings.avatar.startsWith('data:')) {
+    delete settings.avatar;
+    settings.has_avatar = true;
+  }
   return {
-    settings: Object.fromEntries(
-      Object.keys(SETTINGS_FIELDS.properties!)
-        .filter((k) => k in st.settings)
-        .map((k) => [k, st.settings[k as keyof Settings]]),
-    ),
+    settings,
     channels: channelsOf(st.settings).map((c) => ({ id: c.id, kind: c.kind, name: c.name, enabled: c.enabled })),
     prefs: Object.fromEntries(PREF_KEYS.filter((k) => st.prefs?.[k] !== undefined).map((k) => [k, st.prefs![k]])),
   };

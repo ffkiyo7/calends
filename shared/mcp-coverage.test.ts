@@ -478,6 +478,23 @@ test('every new read tool and connection catalogue: read token visibility, title
   assert.deepEqual(await f.snapshot(), before);
 });
 
+test('settings tools report an uploaded owner avatar without echoing its bytes, and keep it stored', async (t) => {
+  const f = await setup();
+  t.after(() => f.db.close());
+  const bytes = 'A'.repeat(120_000);
+  const avatar = `data:image/png;base64,${bytes}`;
+  const saved = await f.call('update_settings', { set: { avatar } });
+  assert.equal(saved.isError, undefined);
+  assert.doesNotMatch(JSON.stringify(saved), new RegExp(bytes.slice(0, 64)));
+  assert.equal(saved.structuredContent.after.settings.has_avatar, true);
+  const got = await f.call('get_settings', {}, f.read);
+  assert.equal(got.isError, undefined);
+  assert.equal(got.structuredContent.settings.avatar, undefined);
+  assert.equal(got.structuredContent.settings.has_avatar, true);
+  assert.ok(JSON.stringify(got).length < 50_000);
+  assert.equal((await f.snapshot()).settings.avatar, avatar);
+});
+
 test('delete references block and report exact links; missing indices/unknown security fields never write', async (t) => {
   const f = await setup();
   t.after(() => f.db.close());
