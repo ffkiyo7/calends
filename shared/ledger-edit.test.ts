@@ -99,6 +99,18 @@ test('person changes and merge synchronize both kinds without dropping actual mo
   assert.equal(merged.subscriptions[0].proxy!.personId, 'target');
 });
 
+test('settings view omits uploaded avatar bytes but keeps avatar URLs', () => {
+  const st = fixture();
+  const uploaded = `data:image/png;base64,${'A'.repeat(200_000)}`;
+  const view = safeSettings({ ...st, settings: { ...st.settings, avatar: uploaded } });
+  assert.equal(view.settings.avatar, undefined);
+  assert.equal(view.settings.has_avatar, true);
+  assert.ok(JSON.stringify(view).length < 10_000);
+  const url = safeSettings({ ...st, settings: { ...st.settings, avatar: 'https://example.test/a.png' } });
+  assert.equal(url.settings.avatar, 'https://example.test/a.png');
+  assert.equal(url.settings.has_avatar, undefined);
+});
+
 test('settings allowlist rejects nested secrets, omits all credentials and preserves unknown stored data', () => {
   const st = fixture();
   assert.doesNotMatch(JSON.stringify(safeSettings(st)), /SECRET|PRIVATE|private.example/);
