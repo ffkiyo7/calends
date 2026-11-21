@@ -458,7 +458,7 @@ test('every new read tool and connection catalogue: read token visibility, title
   const before = await f.snapshot();
   const listed = await f.rpc('tools/list', {}, f.read);
   assert.equal(listed.tools.length, TOOLS.filter((x) => !x.write).length);
-  assert.equal(TOOLS.length, 36);
+  assert.equal(TOOLS.length, 37);
   assert.deepEqual(
     ASSISTANT_TOOLS.map((x) => x.name),
     TOOLS.map((x) => x.name),
@@ -2499,4 +2499,45 @@ test('assistant clears malformed-argument failure after the same tool successful
   assert.equal(es.filter((e) => e.type === 'proposal').length, 1);
   assert.deepEqual(es.find((e) => e.type === 'done').outcome, { status: 'complete', drafts: 1, failures: [] });
   assert.deepEqual(await f.snapshot(), before);
+});
+
+test('common services: search shares the web catalogue and create fills only omitted fields', async (t) => {
+  const f = await setup();
+  t.after(() => f.db.close());
+  const { settings } = await f.snapshot();
+  const categories = [...(settings.categories ?? []), { name: 'AI tools', preset: 'ai' }, { name: 'Utilities', preset: 'tools' }];
+  assert.equal((await f.request('settings', 'PUT', { ...settings, categories })).status, 200);
+  const before = await f.snapshot();
+  const data = (r: { content: Array<{ text: string }> }) => JSON.parse(r.content[0].text);
+  const base = { price: 10, currency: 'USD', cycle: { unit: 'month' }, dry_run: true };
+  const found = data(await f.call('search_services', { query: 'google ai' }, f.read));
+  assert.equal(found.results[0].name, 'Gemini');
+  assert.equal(found.results[0].icon, '/ai/gemini.svg');
+  for (const name of ['Google AI Pro', 'Gemini']) {
+    const out = data(await f.call('create_subscription', { ...base, name }));
+    assert.equal(out.after.name, name);
+    assert.equal(out.after.icon, '/ai/gemini.svg');
+    assert.equal(out.after.url, 'https://gemini.google.com');
+    assert.equal(out.after.category, 'AI tools');
+    assert.equal(out.service_match.status, 'matched');
+  }
+  const kept = data(await f.call('create_subscription', { ...base, name: 'Gemini', url: 'https://example.test/' }));
+  assert.equal(kept.after.url, 'https://example.test/');
+  const chosen = data(await f.call('create_subscription', { ...base, name: 'Gemini', category: 'Other' }));
+  assert.equal(chosen.after.category, 'Other');
+  assert.equal(chosen.after.icon, '/ai/gemini.svg');
+  const explicit = data(await f.call('create_subscription', { ...base, name: 'Gemini', icon: '' }));
+  assert.equal(explicit.after.icon, undefined);
+  assert.equal(explicit.service_match, undefined);
+  assert.equal(data(await f.call('create_subscription', { ...base, name: 'Gemini Fan Club' })).service_match.status, 'none');
+  assert.deepEqual(await f.snapshot(), before);
+  const record = { ...sub(), id: 'catalog-existing', name: 'Gemini', share: undefined, methodId: undefined, icon: undefined, url: undefined };
+  const created = data(await f.call('save_subscription', { subscription: { ...record, id: 'catalog-new' }, force: true, dry_run: true }));
+  assert.equal(created.after.icon, '/ai/gemini.svg');
+  assert.equal(created.service_match.status, 'matched');
+  const stored = { ...sub(), id: 'catalog-existing', name: 'Gemini', share: undefined };
+  assert.equal((await f.call('save_subscription', { subscription: stored, force: true })).isError, undefined);
+  const replaced = data(await f.call('save_subscription', { subscription: stored, dry_run: true }));
+  assert.equal(replaced.after.icon, undefined);
+  assert.equal(replaced.service_match, undefined);
 });
